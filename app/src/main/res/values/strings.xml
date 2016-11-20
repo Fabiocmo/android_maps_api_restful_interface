@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">Maps RESTful interface example</string>
+    <string name="title_activity_maps">Map</string>
+
+    <string name="prompt_email">Enter email</string>
+    <string name="prompt_password">Password </string>
+    <string name="prompt_firstname">First name </string>
+    <string name="prompt_lastname">Last name </string>
+    <string name="prompt_username">Username </string>
+    <string name="registration_button">Register</string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_first_name">Please enter your first name</string>
+    <string name="error_invalid_last_name">Please enter your last name</string>
+    <string name="error_invalid_username">Please enter a username</string>
+    <string name="username_exists">Please enter a different username, that one already exists</string>
+    <string name="email_exists">You are already registered, please sign in</string>
+    <string name="values_missing">Please fill in all values</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="database_error">Whoops, our database is having trouble, please try again later!</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">Contacts permissions are needed for providing email completions.</string>
+    <string name="no_text"> </string>
+    <string name="registration_message">You are not registered yet. Use the registration button to complete your registration.</string>
+    <string name="registration_failed">Your email or password is already in use</string>
+</resources>
