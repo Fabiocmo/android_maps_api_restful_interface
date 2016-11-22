@@ -1,26 +1,16 @@
 package com.example.phil.mapsrestfulinterfaceexample;
 
-import android.support.v4.app.FragmentActivity;
+import android.content.Context;
+import android.content.SharedPreferences;
 
 /**
  * Created by Phil on 19-Nov-16.
  */
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -43,10 +33,18 @@ public class LoginActivity extends AppCompatActivity {
     private String email;
     private String password;
     private InputValidator inputValidator;
+    private SharedPreferences prefs;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //// TODO: 20-Nov-16 : Check if user details are in shared prefs, if they are then log in automatically (if auto-login in shared prefs enabled) 
+
+        //If the user has stored details and hasn't logged out, try to login automatically
+        prefs = getSharedPreferences("userDetails", Context.MODE_PRIVATE);
+        if((prefs.getBoolean("autoLogin", false))==true){
+            email=prefs.getString("email", "");
+            password=prefs.getString("password", "");
+           loginProcessWithRetrofit(email,password);
+        }
         setContentView(R.layout.activity_login);
         // Set up the login form.
         mEmailView = (EditText) findViewById(R.id.email);
@@ -136,12 +134,21 @@ public class LoginActivity extends AppCompatActivity {
                     mPasswordView.requestFocus();
                 }else{ //if the email and password are good...
                     // redirect to Main Activity page
-                    //TODO: store user details in shared prefs, along with auto login
-                    Intent loginIntent = new Intent(LoginActivity.this, MapsActivity.class);
-                    loginIntent.putExtra("EMAIL", email);
+                    prefs =  getSharedPreferences("userDetails", Context.MODE_PRIVATE);
+                    }
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putString("email", mLoginObject.getEmail());
+                     editor.putString("password", mLoginObject.getPassword());
+                    editor.putString("firstName", mLoginObject.getFirst_name());
+                    editor.putString("lastName", mLoginObject.getLast_name());
+                    editor.putString("reviewsWritten", mLoginObject.getReviews_written());
+                     editor.putString("id", mLoginObject.getId());
+                     editor.putBoolean("autoLogin", true);
+                    editor.commit();
+                    Intent loginIntent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(loginIntent);
                 }
-            }
+
             @Override
             public void onFailure(Call<Login> call, Throwable t) {
                 call.cancel();
@@ -149,5 +156,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
+
 
 }

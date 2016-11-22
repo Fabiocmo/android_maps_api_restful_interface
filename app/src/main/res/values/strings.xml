@@ -25,4 +25,10 @@
     <string name="no_text"> </string>
     <string name="registration_message">You are not registered yet. Use the registration button to complete your registration.</string>
     <string name="registration_failed">Your email or password is already in use</string>
+    <string name="title_activity_drawer">drawer</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
 </resources>

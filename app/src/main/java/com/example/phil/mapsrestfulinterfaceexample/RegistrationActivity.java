@@ -1,6 +1,8 @@
 package com.example.phil.mapsrestfulinterfaceexample;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
@@ -38,6 +40,7 @@ public class RegistrationActivity extends AppCompatActivity {
     private String username;
     private String password;
     private InputValidator inputValidator;
+    private SharedPreferences prefs;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -147,12 +150,17 @@ public class RegistrationActivity extends AppCompatActivity {
                     mPasswordView.requestFocus();
                 }else{ //if the email and password are good...
                     // redirect to Main Activity page
-                    //TODO: store user details in shared prefs, along with auto login. However, remember that we don't have the id yet...
-                    Intent registeredIntent = new Intent(RegistrationActivity.this, MapsActivity.class);
-                    registeredIntent.putExtra("EMAIL", email);
+                    prefs =  getSharedPreferences("userDetails", Context.MODE_PRIVATE);
+                }
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString("email", mLoginObject.getEmail());
+                editor.putString("password", mLoginObject.getPassword());
+                editor.putBoolean("autoLogin", true);
+                editor.commit();
+                    Intent registeredIntent = new Intent(RegistrationActivity.this, LoginActivity.class);
                     startActivity(registeredIntent);
                 }
-            }
+
             @Override
             public void onFailure(Call<Login> call, Throwable t) {
                 call.cancel();
