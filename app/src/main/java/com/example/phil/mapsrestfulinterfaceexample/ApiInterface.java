@@ -4,13 +4,14 @@ package com.example.phil.mapsrestfulinterfaceexample;
  * Created by Phil on 19-Nov-16.
  */
 
+import com.example.phil.mapsrestfulinterfaceexample.POJO.Login;
+
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Field;
+import retrofit2.http.Query;
 
 public interface ApiInterface {
     @FormUrlEncoded
@@ -25,5 +26,7 @@ public interface ApiInterface {
             @Field("lastname") String lastname,
             @Field("username") String username,
             @Field("password") String password);
+
+
 
 }

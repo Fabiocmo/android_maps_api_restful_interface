@@ -1,4 +1,4 @@
-package com.example.phil.mapsrestfulinterfaceexample;
+package com.example.phil.mapsrestfulinterfaceexample.POJO;
 
 /**
  * Created by Phil on 19-Nov-16.
