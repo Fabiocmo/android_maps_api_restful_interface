@@ -120,8 +120,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onResponse(Call<Login> call, Response<Login> response) {
                 Login mLoginObject = response.body();
                 String returnedResponse = mLoginObject.getId();//use this to determine if user exists or if login details are correct
-                Toast.makeText(LoginActivity.this, "Returned " + returnedResponse, Toast.LENGTH_LONG).show();
-                //showProgress(false);
+
 
                 if(returnedResponse.trim().equals("bad_email")){
                     // use the registration button to register

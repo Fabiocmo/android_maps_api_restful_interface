@@ -20,7 +20,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.phil.mapsrestfulinterfaceexample.POJO.Company;
+import com.example.phil.mapsrestfulinterfaceexample.POJO.Login;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -44,6 +47,9 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.VisibleRegion;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -55,6 +61,7 @@ public class MainActivity extends AppCompatActivity
 
     private GoogleMap mMap;
     private SharedPreferences prefs;
+    private SharedPreferences companyPrefs;
     private GoogleApiClient mGoogleApiClient;
     private TextView header_name;
     private TextView header_email;
@@ -64,8 +71,8 @@ public class MainActivity extends AppCompatActivity
     private String email;
     private String id;
     private TextView mAttributions;
-
-    //AIzaSyD3Zg6vFcK4AgrFE61bDik6dPNxYVW6DaI
+    private MapInfoWindowAdapter mapInfoWindowAdapter;
+    public static final String BASE_URL = "http://192.168.1.14";
 
 
     @Override
@@ -126,19 +133,31 @@ public class MainActivity extends AppCompatActivity
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        mapInfoWindowAdapter = new MapInfoWindowAdapter(this);
+
 
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        mMap.setInfoWindowAdapter(mapInfoWindowAdapter);
+        getAllCompanies();
+        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                Intent detailIntent = new Intent(MainActivity.this, CompanyDetail.class);
+                startActivity(detailIntent);
+                companyPrefs = getSharedPreferences("companyDetails", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = companyPrefs.edit();
+                String tempCompanyID = (String) marker.getTag();
+                editor.putString("detailCompanyID",tempCompanyID);
+                editor.commit();
+            }
+        });
 
     }
+
 
     @Override
     public void onBackPressed() {
@@ -258,13 +277,22 @@ public class MainActivity extends AppCompatActivity
             if (resultCode == RESULT_OK) {
                 // retrive the data by using getPlace() method.
                 Place place = PlaceAutocomplete.getPlace(this, data);
+                final String tempCompanyName = (String) place.getName();
+                final String tempCompanyAddress = (String) place.getAddress();
+                final LatLng tempCompanyLatLng = place.getLatLng();
+                final String tempCompanyGooglePlaceID = place.getId();
                 Log.e("Tag", "Place: " + place.getAddress() + place.getPhoneNumber());
+
+                final double tempLat = tempCompanyLatLng.latitude;
+                final double tempLong = tempCompanyLatLng.longitude;
+
+
                 new AlertDialog.Builder(this)
-                        .setTitle("Delete entry")
-                        .setMessage("Are you sure you want to delete this entry?")
+                        .setTitle("Confirm addition")
+                        .setMessage("Are you sure you want to add this company?")
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                // continue with delete
+                            addCompany(tempCompanyName,tempCompanyAddress,tempLat, tempLong,tempCompanyGooglePlaceID);
                             }
                         })
                         .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -278,7 +306,7 @@ public class MainActivity extends AppCompatActivity
 
             } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
                 Status status = PlaceAutocomplete.getStatus(this, data);
-                // TODO: Handle the error.
+
                 Log.e("Tag", status.getStatusMessage());
 
             } else if (resultCode == RESULT_CANCELED) {
@@ -292,6 +320,90 @@ public class MainActivity extends AppCompatActivity
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
+
+    private ApiInterface getInterfaceService() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        final ApiInterface mInterfaceService = retrofit.create(ApiInterface.class);
+        return mInterfaceService;
+    }
+
+    private void addCompany(final String name, String address, double lat, double lng, String googleId){
+        ApiInterface mApiService = this.getInterfaceService();
+        Call<Company> mService = mApiService.addCompany(name, address, lat,lng,googleId);
+        mService.enqueue(new Callback<Company>() {
+            @Override
+            public void onResponse(Call<Company> call, Response<Company> response) {
+                Company mCompanyObject = response.body();
+                String returnedResponse = mCompanyObject.getCompany_ID();//use this to determine if company already exists
+                Toast.makeText(MainActivity.this, "Returned " + returnedResponse, Toast.LENGTH_LONG).show();
+                //showProgress(false);
+
+                if(returnedResponse.trim().equals("company_exists")){
+                    displayDialog("Company already exists","This company is already in our database");
+                } else  if(returnedResponse.trim().equals("value_missing")){
+                    displayDialog("Value missing","One or more values needed to create the company don't exist");
+                } else  if(returnedResponse.trim().equals("sql_error")){
+                    displayDialog("Database error","Sorry, our database is experiencing problems, please try again later");
+                } else{
+                    displayDialog("Company successfully added", "Company has been added to database");
+                }
+                mMap.clear();
+                getAllCompanies();
+            }
+
+            @Override
+            public void onFailure(Call<Company> call, Throwable t) {
+                call.cancel();
+                Toast.makeText(MainActivity.this, "Please check your network connection and internet permission"+t, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void displayDialog(String dialogTitle, String dialogText){
+        new AlertDialog.Builder(MainActivity.this)
+                .setTitle(dialogTitle)
+                .setMessage(dialogText)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+
+    private void getAllCompanies(){
+        ApiInterface mApiService = this.getInterfaceService();
+        Call<List<Company>> mService = mApiService.getAllCompanies();
+        mService.enqueue(new Callback<List<Company>>() {
+            @Override
+            public void onResponse(Call<List<Company>> call, Response<List<Company>> response) {
+                List<Company> companyData = response.body();
+                for (Company com:companyData
+                     ) {
+                    // Add a marker in Sydney and move the camera
+                    LatLng companyLatLng = new LatLng(com.getLat(), com.getLng());
+                    Marker tempMarker = mMap.addMarker(new MarkerOptions()
+                            .position(companyLatLng)
+                            .title(com.getCompany_name())
+                             .snippet("Rating: "+com.getAvg_rating()+"\n\n"+com.getAddress()));
+                    tempMarker.setTag(com.getCompany_ID());
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<List<Company>> call, Throwable t) {
+                call.cancel();
+                Toast.makeText(MainActivity.this, "Please check your network connection and internet permission"+t, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
 
 
 }
