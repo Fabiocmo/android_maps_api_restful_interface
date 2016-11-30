@@ -15,11 +15,13 @@
             android:layout_height="wrap_content"
             android:textSize="14sp"
             android:textStyle="bold"/>
+
         <TextView
             android:id="@+id/snippet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="12sp"/>
+
         <TextView
             android:id="@+id/click_for_more"
             android:layout_width="wrap_content"

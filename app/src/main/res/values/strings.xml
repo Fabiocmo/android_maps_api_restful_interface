@@ -34,4 +34,6 @@
     <string name="destination_hint">Enter company name</string>
     <string name="click">Click to see company reviews</string>
     <string name="title_activity_company_detail">CompanyDetail</string>
+    <string name="review_title_hint">Review title</string>
+    <string name="review_body_hint">Enter your review here</string>
 </resources>

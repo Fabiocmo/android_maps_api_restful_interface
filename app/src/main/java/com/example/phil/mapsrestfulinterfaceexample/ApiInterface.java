@@ -6,6 +6,7 @@ package com.example.phil.mapsrestfulinterfaceexample;
 
 import com.example.phil.mapsrestfulinterfaceexample.POJO.Company;
 import com.example.phil.mapsrestfulinterfaceexample.POJO.Login;
+import com.example.phil.mapsrestfulinterfaceexample.POJO.Review;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
@@ -42,5 +43,27 @@ public interface ApiInterface {
 
     @POST("/reviewsapp/get_all_companies.php")
     Call<List<Company>> getAllCompanies();
+
+    @FormUrlEncoded
+    @POST("/reviewsapp/add_review.php") //if this doesn't work, check that php isn't echoing anything that might upset the <> bit of Call
+    Call<Review> addReview(
+            @Field("company_ID") String company_ID,
+            @Field("user_ID") String user_ID,
+            @Field("title") String title,
+            @Field("text_body") String text_body,
+            @Field("star_rating") double star_rating);
+
+    @FormUrlEncoded
+    @POST("/reviewsapp/get_single_company.php")
+    Call<Company> getCompany(
+            @Field("company_ID") String company_ID
+    );
+
+    @FormUrlEncoded
+    @POST("/reviewsapp/get_reviews_for_company.php")
+    Call<List<Review>> getAllReviewsForCompany(
+            @Field("company_ID") String company_ID
+    );
+
 
 }

@@ -14,6 +14,8 @@ public class Company {
     private String googleId;
     private double avg_rating;
 
+
+
     public String getCompany_ID() {
         return company_ID;
     }

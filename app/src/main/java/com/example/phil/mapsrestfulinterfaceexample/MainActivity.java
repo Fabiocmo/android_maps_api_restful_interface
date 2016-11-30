@@ -19,6 +19,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -100,8 +101,7 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+               //TODO: add something here?
             }
         });
 
@@ -338,8 +338,7 @@ public class MainActivity extends AppCompatActivity
             public void onResponse(Call<Company> call, Response<Company> response) {
                 Company mCompanyObject = response.body();
                 String returnedResponse = mCompanyObject.getCompany_ID();//use this to determine if company already exists
-                Toast.makeText(MainActivity.this, "Returned " + returnedResponse, Toast.LENGTH_LONG).show();
-                //showProgress(false);
+
 
                 if(returnedResponse.trim().equals("company_exists")){
                     displayDialog("Company already exists","This company is already in our database");
@@ -385,7 +384,6 @@ public class MainActivity extends AppCompatActivity
                 List<Company> companyData = response.body();
                 for (Company com:companyData
                      ) {
-                    // Add a marker in Sydney and move the camera
                     LatLng companyLatLng = new LatLng(com.getLat(), com.getLng());
                     Marker tempMarker = mMap.addMarker(new MarkerOptions()
                             .position(companyLatLng)
