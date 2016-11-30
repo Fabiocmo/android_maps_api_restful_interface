@@ -27,7 +27,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RegistrationActivity extends AppCompatActivity {
 
-    public static final String BASE_URL = "http://192.168.1.14";
+    public static final String BASE_URL = "YOUR_IP_HERE";
     // UI references.
     private EditText mEmailView;
     private EditText mFirstNameView;
