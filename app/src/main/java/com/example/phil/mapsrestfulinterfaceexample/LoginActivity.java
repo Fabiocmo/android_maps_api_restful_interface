@@ -27,7 +27,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * A login screen that offers login via email/password.
  */
 public class LoginActivity extends AppCompatActivity {
-    public static final String BASE_URL = "http://192.168.1.14";
+    public static final String BASE_URL = "YOUR_IP_HERE";
     // UI references.
     private EditText mEmailView;
     private EditText mPasswordView;
