@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity
     private String id;
     private TextView mAttributions;
     private MapInfoWindowAdapter mapInfoWindowAdapter;
-    public static final String BASE_URL = "http://192.168.1.14";
+    public static final String BASE_URL = "YOUR_IP_HERE";
 
 
     @Override
