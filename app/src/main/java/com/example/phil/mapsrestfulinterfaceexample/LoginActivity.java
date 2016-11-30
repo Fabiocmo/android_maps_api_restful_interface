@@ -123,15 +123,12 @@ public class LoginActivity extends AppCompatActivity {
 
 
                 if(returnedResponse.trim().equals("bad_email")){
-                    // use the registration button to register
                     failedLoginMessage.setText(getResources().getString(R.string.registration_message));
                     mPasswordView.requestFocus();
                 }else if(returnedResponse.trim().equals("bad_password")){
-                    // use the registration button to register
                     failedLoginMessage.setText(getResources().getString(R.string.error_incorrect_password));
                     mPasswordView.requestFocus();
                 }else if(returnedResponse.trim().equals("bad_sql")){
-                    // use the registration button to register
                     failedLoginMessage.setText(getResources().getString(R.string.database_error));
                     mPasswordView.requestFocus();
                 }else{ //if the email and password are good...
@@ -154,7 +151,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<Login> call, Throwable t) {
                 call.cancel();
-                Toast.makeText(LoginActivity.this, "Please check your network connection and internet permission", Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginActivity.this, "Connection error", Toast.LENGTH_LONG).show();
             }
         });
     }

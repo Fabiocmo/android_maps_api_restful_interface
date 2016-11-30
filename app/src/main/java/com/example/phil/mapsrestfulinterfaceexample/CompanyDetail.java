@@ -99,6 +99,9 @@ public class CompanyDetail extends AppCompatActivity {
 
                                 Log.d("feedback", ""+ reviewBody+reviewTitle+reviewRating);
                                 addReview(company_ID,user_ID,reviewTitle,reviewBody,reviewRating);
+                                reviewsAdapter.clear();
+                                getCompany(company_ID);
+                                getAllReviews(company_ID);
                             }
             })
                         .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -147,7 +150,7 @@ public class CompanyDetail extends AppCompatActivity {
             @Override
             public void onFailure(Call<Review> call, Throwable t) {
                 call.cancel();
-                Toast.makeText(CompanyDetail.this, "Please check your network connection and internet permission"+t, Toast.LENGTH_LONG).show();
+                Toast.makeText(CompanyDetail.this, "Connection error"+t, Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -170,7 +173,7 @@ public class CompanyDetail extends AppCompatActivity {
             @Override
             public void onFailure(Call<Company> call, Throwable t) {
                 call.cancel();
-                Toast.makeText(CompanyDetail.this, "Please check your network connection and internet permission"+t, Toast.LENGTH_LONG).show();
+                Toast.makeText(CompanyDetail.this, "Connection error"+t, Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -192,7 +195,7 @@ public class CompanyDetail extends AppCompatActivity {
             @Override
             public void onFailure(Call<List<Review>> call, Throwable t) {
                 call.cancel();
-                Toast.makeText(CompanyDetail.this, "Please check your network connection and internet permission"+t, Toast.LENGTH_LONG).show();
+                Toast.makeText(CompanyDetail.this, "Connection error"+t, Toast.LENGTH_LONG).show();
             }
         });
     }

@@ -24,7 +24,7 @@ public interface ApiInterface {
     Call<Login> tryLogin(@Field("email") String email, @Field("password") String password);
 
     @FormUrlEncoded
-    @POST("/reviewsapp/insert_user.php") //if this doesn't work, check that php isn't echoing anything that might upset the <> bit of Call
+    @POST("/reviewsapp/insert_user.php")
     Call<Login> register(
             @Field("email") String email,
             @Field("firstname") String firstname,
@@ -33,7 +33,7 @@ public interface ApiInterface {
             @Field("password") String password);
 
     @FormUrlEncoded
-    @POST("/reviewsapp/add_company.php") //if this doesn't work, check that php isn't echoing anything that might upset the <> bit of Call
+    @POST("/reviewsapp/add_company.php")
     Call<Company> addCompany(
             @Field("company_name") String company_name,
             @Field("address") String address,
@@ -45,7 +45,7 @@ public interface ApiInterface {
     Call<List<Company>> getAllCompanies();
 
     @FormUrlEncoded
-    @POST("/reviewsapp/add_review.php") //if this doesn't work, check that php isn't echoing anything that might upset the <> bit of Call
+    @POST("/reviewsapp/add_review.php")
     Call<Review> addReview(
             @Field("company_ID") String company_ID,
             @Field("user_ID") String user_ID,

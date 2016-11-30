@@ -18,9 +18,9 @@ public class InputValidator {
     private String username;
 
 
-    public int loginValidation(String email, String password) {
-        this.email = email;
-        this.password = password;
+    public int loginValidation(String mEmail, String mPassword) {
+        this.email = mEmail;
+        this.password = mPassword;
         int error = 0;
         // Check for a valid password, if the user entered one.
         if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
@@ -35,12 +35,12 @@ public class InputValidator {
         return error;
     }
 
-    public int registrationValidation(String email, String password, String firstName, String lastName, String username) {
-        this.email = email;
-        this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.username = username;
+    public int registrationValidation(String mEmail, String mPassword, String mFirstName, String mLastName, String mUsername) {
+        this.email = mEmail;
+        this.password = mPassword;
+        this.firstName = mFirstName;
+        this.lastName = mLastName;
+        this.username = mUsername;
         int error = 0;
         // Check for a valid password, if the user entered one.
         if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
@@ -62,9 +62,9 @@ public class InputValidator {
     }
 
     private boolean isEmailValid(String email) {
-        return true;//email.contains("@");
+        return email.contains("@");
     }
     private boolean isPasswordValid(String password) {
-        return true;// password.length() > 6;
+        return password.length() > 6;
     }
 }

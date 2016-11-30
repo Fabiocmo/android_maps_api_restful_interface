@@ -135,19 +135,15 @@ public class RegistrationActivity extends AppCompatActivity {
                 //showProgress(false);
 
                 if(returnedResponse.trim().equals("username_exists")){
-                    // use the registration button to register
                     failedRegisterMessage.setText(getResources().getString(R.string.registration_message));
                     mPasswordView.requestFocus();
                 }else if(returnedResponse.trim().equals("email_exists")){
-                    // use the registration button to register
                     failedRegisterMessage.setText(getResources().getString(R.string.error_incorrect_password));
                     mPasswordView.requestFocus();
                 }else if(returnedResponse.trim().equals("error")){
-                    // use the registration button to register
                     failedRegisterMessage.setText(getResources().getString(R.string.database_error));
                     mPasswordView.requestFocus();
                 }else if(returnedResponse.trim().equals("values_missing")){
-                    // use the registration button to register
                     failedRegisterMessage.setText(getResources().getString(R.string.database_error));
                     mPasswordView.requestFocus();
                 }else{ //if the email and password are good...
@@ -166,7 +162,7 @@ public class RegistrationActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<Login> call, Throwable t) {
                 call.cancel();
-                Toast.makeText(RegistrationActivity.this, "Please check your network connection and internet permission", Toast.LENGTH_LONG).show();
+                Toast.makeText(RegistrationActivity.this, "Connection error", Toast.LENGTH_LONG).show();
             }
         });
     }

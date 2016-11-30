@@ -63,13 +63,13 @@ public class MainActivity extends AppCompatActivity
     private GoogleMap mMap;
     private SharedPreferences prefs;
     private SharedPreferences companyPrefs;
-    private GoogleApiClient mGoogleApiClient;
     private TextView header_name;
     private TextView header_email;
     private String firstName;
+    private String email;
+    //to use later
     private String lastName;
     private String reviewsWritten;
-    private String email;
     private String id;
     private TextView mAttributions;
     private MapInfoWindowAdapter mapInfoWindowAdapter;
@@ -83,27 +83,6 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //show error dialog if Google Play Services not available
-        if (!isGooglePlayServicesAvailable()) {
-            Log.d("onCreate", "Google Play Services not available. Ending Test case.");
-            finish();
-        }
-        else {
-            mGoogleApiClient = new GoogleApiClient
-                    .Builder(this)
-                    .addApi(Places.GEO_DATA_API)
-                    .addApi(Places.PLACE_DETECTION_API)
-                    .enableAutoManage(this, this)
-                    .build();
-        }
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-               //TODO: add something here?
-            }
-        });
 
       DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -121,7 +100,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
        navigationView.setNavigationItemSelectedListener(this);
         View header=navigationView.getHeaderView(0);
-        /*View view=navigationView.inflateHeaderView(R.layout.nav_header_main);*/
+
         header_name = (TextView)header.findViewById(R.id.header_name);
         header_email = (TextView)header.findViewById(R.id.header_email);
         header_name.setText(firstName);
@@ -220,8 +199,6 @@ public class MainActivity extends AppCompatActivity
                 Log.d("autocomplete error", "not available");
             }
 
-        } else if (id == R.id.nav_send) {
-
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -257,18 +234,6 @@ public class MainActivity extends AppCompatActivity
                 .show();
     }
 
-    private boolean isGooglePlayServicesAvailable() {
-        GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
-        int result = googleAPI.isGooglePlayServicesAvailable(this);
-        if(result != ConnectionResult.SUCCESS) {
-            if(googleAPI.isUserResolvableError(result)) {
-                googleAPI.getErrorDialog(this, result,
-                        0).show();
-            }
-            return false;
-        }
-        return true;
-    }
 
     // A place has been received; use requestCode to track the request.
     @Override
@@ -281,7 +246,6 @@ public class MainActivity extends AppCompatActivity
                 final String tempCompanyAddress = (String) place.getAddress();
                 final LatLng tempCompanyLatLng = place.getLatLng();
                 final String tempCompanyGooglePlaceID = place.getId();
-                Log.e("Tag", "Place: " + place.getAddress() + place.getPhoneNumber());
 
                 final double tempLat = tempCompanyLatLng.latitude;
                 final double tempLong = tempCompanyLatLng.longitude;

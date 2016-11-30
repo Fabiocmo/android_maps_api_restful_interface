@@ -9,16 +9,13 @@
 
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="@string/user_actions">
         <menu>
             <item
                 android:id="@+id/nav_add_business"
-                android:icon="@drawable/ic_menu_share"
+                android:icon="@drawable/ic_menu_manage"
                 android:title="Add business" />
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+
         </menu>
     </item>
 
